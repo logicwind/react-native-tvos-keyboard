@@ -35,17 +35,27 @@ type TvosKeyboardProps = ViewProps & {
 
 const ComponentName = 'TvosKeyboardView';
 
-let NativeKeyboardComponent: React.ComponentType<TvosKeyboardProps>;
+let NativeKeyboardComponent: React.ComponentType<TvosKeyboardProps> | null =
+  null;
 
-if (UIManager.getViewManagerConfig(ComponentName) != null) {
-  NativeKeyboardComponent =
-    requireNativeComponent<TvosKeyboardProps>(ComponentName);
-} else {
-  throw new Error(LINKING_ERROR);
+if (Platform.OS === 'ios' && Platform.isTV) {
+  if (UIManager.getViewManagerConfig(ComponentName) != null) {
+    NativeKeyboardComponent =
+      requireNativeComponent<TvosKeyboardProps>(ComponentName);
+  } else {
+    throw new Error(LINKING_ERROR);
+  }
 }
 
 export const TvosKeyboardView = forwardRef<any, TvosKeyboardProps>(
   (props, ref) => {
+    if (
+      Platform.OS !== 'ios' ||
+      !Platform.isTV ||
+      NativeKeyboardComponent === null
+    ) {
+      return null;
+    }
     return <NativeKeyboardComponent {...props} ref={ref} />;
   }
 );
