@@ -1,8 +1,11 @@
+import React, { forwardRef } from 'react';
 import {
   requireNativeComponent,
   UIManager,
   Platform,
   type ViewStyle,
+  type NativeSyntheticEvent,
+  type ViewProps,
 } from 'react-native';
 
 const LINKING_ERROR =
@@ -11,16 +14,38 @@ const LINKING_ERROR =
   '- You rebuilt the app after installing the package\n' +
   '- You are not using Expo Go\n';
 
-type TvosKeyboardProps = {
-  color: string;
-  style: ViewStyle;
+type OnFocusEvent = NativeSyntheticEvent<{
+  focused: boolean;
+}>;
+
+type OnBlurEvent = NativeSyntheticEvent<{
+  blurred: boolean;
+}>;
+
+type OnTextChangeEvent = NativeSyntheticEvent<{
+  text: string;
+}>;
+
+type TvosKeyboardProps = ViewProps & {
+  onTextChange?: (event: OnTextChangeEvent) => void;
+  onFocus?: (event: OnFocusEvent) => void;
+  onBlur?: (event: OnBlurEvent) => void;
+  style?: ViewStyle;
 };
 
 const ComponentName = 'TvosKeyboardView';
 
-export const TvosKeyboardView =
-  UIManager.getViewManagerConfig(ComponentName) != null
-    ? requireNativeComponent<TvosKeyboardProps>(ComponentName)
-    : () => {
-        throw new Error(LINKING_ERROR);
-      };
+let NativeKeyboardComponent: React.ComponentType<TvosKeyboardProps>;
+
+if (UIManager.getViewManagerConfig(ComponentName) != null) {
+  NativeKeyboardComponent =
+    requireNativeComponent<TvosKeyboardProps>(ComponentName);
+} else {
+  throw new Error(LINKING_ERROR);
+}
+
+export const TvosKeyboardView = forwardRef<any, TvosKeyboardProps>(
+  (props, ref) => {
+    return <NativeKeyboardComponent {...props} ref={ref} />;
+  }
+);
