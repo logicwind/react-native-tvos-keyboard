@@ -1,36 +1,95 @@
+import UIKit
+import React
+
 @objc(TvosKeyboardViewManager)
 class TvosKeyboardViewManager: RCTViewManager {
-
-  override func view() -> (TvosKeyboardView) {
+  override func view() -> UIView {
     return TvosKeyboardView()
   }
 
   @objc override static func requiresMainQueueSetup() -> Bool {
-    return false
+    return true
+  }
+
+  @objc func focusSearchBar(_ reactTag: NSNumber) {
+    DispatchQueue.main.async {
+      if let view = self.bridge.uiManager.view(forReactTag: reactTag) as? TvosKeyboardView {
+        view.focusSearchBar()
+      }
+    }
   }
 }
 
-class TvosKeyboardView : UIView {
+class TvosKeyboardView: UIView, UISearchResultsUpdating, UISearchBarDelegate {
 
-  @objc var color: String = "" {
-    didSet {
-      self.backgroundColor = hexStringToUIColor(hexColor: color)
+  private var searchController: UISearchController!
+  private var containerVC: UISearchContainerViewController!
+  private let searchResultsController = UICollectionViewController(collectionViewLayout: UICollectionViewFlowLayout())
+
+  @objc var onTextChange: RCTBubblingEventBlock?
+  @objc var onFocus: RCTBubblingEventBlock?
+  @objc var onBlur: RCTBubblingEventBlock?
+
+  override init(frame: CGRect) {
+    super.init(frame: frame)
+    setupSearchController()
+  }
+
+  required init?(coder: NSCoder) {
+    super.init(coder: coder)
+    setupSearchController()
+  }
+
+  private func setupSearchController() {
+    let resultsVC = UIViewController()
+    resultsVC.view.backgroundColor = .clear
+
+    searchController = UISearchController(searchResultsController: resultsVC)
+    searchController.searchResultsUpdater = self
+    searchController.obscuresBackgroundDuringPresentation = false
+    searchController.hidesNavigationBarDuringPresentation = false
+    searchController.automaticallyShowsCancelButton = false
+    searchController.searchBar.placeholder = "Enter keyword"
+      
+    if #available(tvOS 14.0, *) {
+      searchController.searchControllerObservedScrollView = searchResultsController.collectionView
+      searchController.searchSuggestions = nil
+    }
+
+    searchController.searchBar.delegate = self
+
+    containerVC = UISearchContainerViewController(searchController: searchController)
+    containerVC.view.translatesAutoresizingMaskIntoConstraints = false
+    containerVC.view.clipsToBounds = true
+
+    self.addSubview(containerVC.view)
+    self.clipsToBounds = true
+
+    NSLayoutConstraint.activate([
+      containerVC.view.topAnchor.constraint(equalTo: self.topAnchor),
+      containerVC.view.bottomAnchor.constraint(equalTo: self.bottomAnchor),
+      containerVC.view.leadingAnchor.constraint(equalTo: self.leadingAnchor),
+      containerVC.view.trailingAnchor.constraint(equalTo: self.trailingAnchor),
+    ])
+  }
+
+  func focusSearchBar() {
+    DispatchQueue.main.async {
+      self.searchController.searchSuggestions = nil
+      self.searchController.searchBar.becomeFirstResponder()
     }
   }
 
-  func hexStringToUIColor(hexColor: String) -> UIColor {
-    let stringScanner = Scanner(string: hexColor)
+  func updateSearchResults(for searchController: UISearchController) {
+    let text = searchController.searchBar.text ?? ""
+    onTextChange?(["text": text])
+  }
 
-    if(hexColor.hasPrefix("#")) {
-      stringScanner.scanLocation = 1
-    }
-    var color: UInt32 = 0
-    stringScanner.scanHexInt32(&color)
+  func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
+    onFocus?(["focused": true])
+  }
 
-    let r = CGFloat(Int(color >> 16) & 0x000000FF)
-    let g = CGFloat(Int(color >> 8) & 0x000000FF)
-    let b = CGFloat(Int(color) & 0x000000FF)
-
-    return UIColor(red: r / 255.0, green: g / 255.0, blue: b / 255.0, alpha: 1)
+  func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
+    onBlur?(["blurred": true])
   }
 }
