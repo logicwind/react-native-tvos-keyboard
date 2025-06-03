@@ -1,19 +1,19 @@
-# react-native-tvos-keyboard
+# @logicwind/react-native-tvos-keyboard
 
-`react-native-tvos-keyboard` is a React Native package for tvOS that displays a native Apple TV keyboard using UISearchController, with built-in support for voice typing and seamless integration with the tvOS focus engine.
+`@logicwind/react-native-tvos-keyboard` is a React Native package for tvOS that displays a native Apple TV keyboard using UISearchController, with built-in support for voice typing and seamless integration with the tvOS focus engine.
 
 ## Installation
 
 Using npm:
 
 ```sh md title="Terminal"
-npm install react-native-tvos-keyboard
+npm install @logicwind/react-native-tvos-keyboard
 ```
 
 or using yarn:
 
 ```sh md title="Terminal"
-yarn add react-native-tvos-keyboard
+yarn add @logicwind/react-native-tvos-keyboard
 ```
 
 ### iOS Setup
@@ -33,7 +33,7 @@ No additional setup is required.
 Import and use the `TvosKeyboardView` component.
 
 ```tsx md title="App.tsx"
-import { TvosKeyboardView } from 'react-native-tvos-keyboard';
+import { TvosKeyboardView } from '@logicwind/react-native-tvos-keyboard';
 
 <TvosKeyboardView
   style={styles.keyboard}

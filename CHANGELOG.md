@@ -1,6 +1,12 @@
 ## 0.1.1
 
-- Updated UTM source in README.md file 
+**Breaking Changes:**
+
+- Updated name to @logicwind/react-native-tvos-keyboard
+
+## 0.1.1
+
+- Updated UTM source in README.md file
 
 ## 0.1.0
 

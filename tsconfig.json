@@ -2,7 +2,7 @@
   "compilerOptions": {
     "rootDir": ".",
     "paths": {
-      "react-native-tvos-keyboard": ["./src/index"]
+      "@logicwind/react-native-tvos-keyboard": ["./src/index"]
     },
     "allowUnreachableCode": false,
     "allowUnusedLabels": false,
