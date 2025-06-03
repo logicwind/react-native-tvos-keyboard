@@ -47,15 +47,13 @@ if (Platform.OS === 'ios' && Platform.isTV) {
   }
 }
 
-export const TvosKeyboardView = forwardRef<any, TvosKeyboardProps>(
-  (props, ref) => {
-    if (
-      Platform.OS !== 'ios' ||
-      !Platform.isTV ||
-      NativeKeyboardComponent === null
-    ) {
-      return null;
-    }
-    return <NativeKeyboardComponent {...props} ref={ref} />;
+export const TvosKeyboardView = forwardRef<any, TvosKeyboardProps>((props) => {
+  if (
+    Platform.OS !== 'ios' ||
+    !Platform.isTV ||
+    NativeKeyboardComponent === null
+  ) {
+    return null;
   }
-);
+  return <NativeKeyboardComponent {...props} />;
+});
