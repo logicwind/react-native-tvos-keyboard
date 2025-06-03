@@ -1,4 +1,4 @@
-import React, { forwardRef } from 'react';
+import React from 'react';
 import {
   requireNativeComponent,
   UIManager,
@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 
 const LINKING_ERROR =
-  `The package 'react-native-tvos-keyboard' doesn't seem to be linked. Make sure: \n\n` +
+  `The package '@logicwind/react-native-tvos-keyboard' doesn't seem to be linked. Make sure: \n\n` +
   Platform.select({ ios: "- You have run 'pod install'\n", default: '' }) +
   '- You rebuilt the app after installing the package\n' +
   '- You are not using Expo Go\n';
@@ -47,7 +47,7 @@ if (Platform.OS === 'ios' && Platform.isTV) {
   }
 }
 
-export const TvosKeyboardView = forwardRef<any, TvosKeyboardProps>((props) => {
+export const TvosKeyboardView = (props: TvosKeyboardProps) => {
   if (
     Platform.OS !== 'ios' ||
     !Platform.isTV ||
@@ -56,4 +56,4 @@ export const TvosKeyboardView = forwardRef<any, TvosKeyboardProps>((props) => {
     return null;
   }
   return <NativeKeyboardComponent {...props} />;
-});
+};

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
-import { TvosKeyboardView } from 'react-native-tvos-keyboard';
+import { TvosKeyboardView } from '@logicwind/react-native-tvos-keyboard';
 
 export default function App() {
   const [text, setText] = useState('');
