@@ -1,5 +1,9 @@
 ## 0.1.2
 
+- Disable RN select gesture intercept during UISearchBar editing
+
+## 0.1.2
+
 **Breaking Changes:**
 
 - Updated name to @logicwind/react-native-tvos-keyboard

@@ -86,10 +86,19 @@ class TvosKeyboardView: UIView, UISearchResultsUpdating, UISearchBarDelegate {
   }
 
   func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
+  #if os(tvOS)
+    NotificationCenter.default.post(name: NSNotification.Name("RCTTVDisableSelectGestureNotification"), object: nil)
+    DispatchQueue.main.async {
+      searchBar.becomeFirstResponder()
+    }
+  #endif
     onFocus?(["focused": true])
   }
 
   func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
+  #if os(tvOS)
+    NotificationCenter.default.post(name: NSNotification.Name("RCTTVEnableSelectGestureNotification"), object: nil)
+  #endif
     onBlur?(["blurred": true])
   }
 }
