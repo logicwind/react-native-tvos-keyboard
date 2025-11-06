@@ -1,6 +1,6 @@
 {
   "name": "@logicwind/react-native-tvos-keyboard",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "Native Apple TV keyboard for React Native tvOS with voice typing support.",
   "source": "./src/index.tsx",
   "main": "./lib/commonjs/index.js",
