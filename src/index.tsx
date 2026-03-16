@@ -3,7 +3,7 @@ import {
   requireNativeComponent,
   UIManager,
   Platform,
-  type ViewStyle,
+  type ColorValue,
   type NativeSyntheticEvent,
   type ViewProps,
 } from 'react-native';
@@ -26,11 +26,18 @@ type OnTextChangeEvent = NativeSyntheticEvent<{
   text: string;
 }>;
 
+type OnKeyboardLayoutChangeEvent = NativeSyntheticEvent<{
+  height: number;
+  isGrid: boolean;
+}>;
+
 type TvosKeyboardProps = ViewProps & {
   onTextChange?: (event: OnTextChangeEvent) => void;
   onFocus?: (event: OnFocusEvent) => void;
   onBlur?: (event: OnBlurEvent) => void;
-  style?: ViewStyle;
+  onKeyboardLayoutChange?: (event: OnKeyboardLayoutChangeEvent) => void;
+  gridSeparatorColor?: ColorValue;
+  linearSeparatorColor?: ColorValue;
 };
 
 const ComponentName = 'TvosKeyboardView';

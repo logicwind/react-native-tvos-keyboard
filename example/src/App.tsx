@@ -5,11 +5,14 @@ import { TvosKeyboardView } from '@logicwind/react-native-tvos-keyboard';
 export default function App() {
   const [text, setText] = useState('');
   const [focused, setFocused] = useState(false);
+  const [keyboardHeight, setKeyboardHeight] = useState(200);
+  const [isGrid, setIsGrid] = useState(false);
 
   return (
     <View style={styles.container}>
       <Text style={styles.text}>Text: {text}</Text>
       <Text style={styles.text}>isFocused: {focused ? 'true' : 'false'}</Text>
+      <Text style={styles.text}>isGrid: {isGrid ? 'true' : 'false'}</Text>
       {/* Top Button */}
       <TouchableOpacity
         style={styles.button}
@@ -23,7 +26,7 @@ export default function App() {
 
       {/* TV Keyboard */}
       <TvosKeyboardView
-        style={styles.keyboard}
+        style={[styles.keyboard, { height: keyboardHeight }]}
         onTextChange={(e) => setText(e.nativeEvent.text)}
         onFocus={(e) => {
           if (e.nativeEvent.focused !== undefined && e.nativeEvent.focused) {
@@ -34,6 +37,10 @@ export default function App() {
           if (e.nativeEvent.blurred !== undefined && e.nativeEvent.blurred) {
             setFocused(false);
           }
+        }}
+        onKeyboardLayoutChange={(e) => {
+          setKeyboardHeight(e.nativeEvent.height);
+          setIsGrid(e.nativeEvent.isGrid);
         }}
       />
 
@@ -53,7 +60,7 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
+
     justifyContent: 'center',
     backgroundColor: '#111',
   },
@@ -63,7 +70,6 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   keyboard: {
-    height: 200,
     width: '100%',
     backgroundColor: 'transparent',
   },
@@ -73,6 +79,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 50,
     borderRadius: 12,
     backgroundColor: '#1e90ff',
+    width: '30%',
+    marginHorizontal: 10,
   },
   buttonText: {
     fontSize: 22,
