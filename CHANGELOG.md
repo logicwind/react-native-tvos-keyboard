@@ -1,4 +1,11 @@
-## 0.1.2
+## 0.1.4
+
+- Added `onKeyboardLayoutChange` prop — fires when the keyboard switches between linear and grid layouts, providing `height` and `isGrid` via `event.nativeEvent`.
+- Added `gridSeparatorColor` prop to customize the separator color in grid layout.
+- Added `linearSeparatorColor` prop to customize the separator color in linear layout.
+- Keyboard height is now dynamic — use `onKeyboardLayoutChange` to update the component's height instead of a static value.
+
+## 0.1.3
 
 - Disable RN select gesture intercept during UISearchBar editing
 
